@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # face_recognition
 
 A new Flutter project.
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# Face-Recognition-with-Flutter
+Realtime face recognition with Flutter
+>>>>>>> 76682ffc9f50cd4b9433a3f14cae2fb033c1025f
