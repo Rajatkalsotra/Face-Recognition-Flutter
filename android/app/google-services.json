@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "269309632485",
+    "firebase_url": "https://face-recog-flutter.firebaseio.com",
+    "project_id": "face-recog-flutter",
+    "storage_bucket": "face-recog-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269309632485:android:730eb146d843d768d3590c",
+        "android_client_info": {
+          "package_name": "com.rajatkalsotra.face_recognition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269309632485-jq1uih9csmj557fmo8fsmdhgucptfhj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHfSBgN_tGjRvN12zV1HpOYhVjRYdN88k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269309632485-jq1uih9csmj557fmo8fsmdhgucptfhj4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
