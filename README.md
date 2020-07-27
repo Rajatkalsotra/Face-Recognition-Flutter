@@ -14,7 +14,10 @@ Convert Tensorflow implementation of [MobileFaceNet](https://github.com/sirius-a
 
 ## Predictions
 
-
+<p float="left">
+  <img src="images/rec1.jpg" width="46% height="100" />
+  <img src="images/rec2.jpg" width="46%" /> 
+</p>
 
 ## References
 
