@@ -9,14 +9,17 @@ import 'utils.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:quiver/collection.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MaterialApp(
+void main(){ 
+  runApp(MaterialApp(
       themeMode: ThemeMode.light,
       theme: ThemeData(brightness: Brightness.light),
       home: _MyHomePage(),
       title: "Face Recognition",
       debugShowCheckedModeBanner: false,
     ));
+}
 
 class _MyHomePage extends StatefulWidget {
   @override
@@ -39,6 +42,11 @@ class _MyHomePageState extends State<_MyHomePage> {
   @override
   void initState() {
     super.initState();
+    
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
     _initializeCamera();
   }
 
