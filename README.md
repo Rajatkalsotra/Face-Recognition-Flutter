@@ -8,7 +8,7 @@ Realtime face recognition flutter app.
 
 ### Face detection
 
-Used Firebase ML Vision to detect faces.
+Used Firebase ML Vision to detect faces . Download [apk](/Face Recognition.apk)
 
 ### Face Recognition
 
