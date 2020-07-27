@@ -12,7 +12,9 @@ Used Firebase ML Vision to detect faces.
 
 Convert Tensorflow implementation of [MobileFaceNet](https://github.com/sirius-ai/MobileFaceNet_TF) model into tflite.
 
-## Predictions
+## Recognitions
+
+Shots from Westworld 
 
 <p float="left">
   <img src="images/rec1.jpg" width="46% height="100" />
