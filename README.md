@@ -1,21 +1,23 @@
-<<<<<<< HEAD
-# face_recognition
+# Face Recognition Flutter
 
-A new Flutter project.
+Realtime face recognition flutter app.
 
-## Getting Started
+## Steps
 
-This project is a starting point for a Flutter application.
+### Face detection
 
-A few resources to get you started if this is your first Flutter project:
+Used Firebase ML Vision to detect faces.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Face Recognition
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# Face-Recognition-with-Flutter
-Realtime face recognition with Flutter
->>>>>>> 76682ffc9f50cd4b9433a3f14cae2fb033c1025f
+Convert Tensorflow implementation of [MobileFaceNet](https://github.com/sirius-ai/MobileFaceNet_TF) model into tflite.
+
+## Predictions
+
+
+
+## References
+
+1. <https://github.com/sirius-ai/MobileFaceNet_TF>
+
+2. [Mobile Face Net](https://arxiv.org/ftp/arxiv/papers/1804/1804.07573.pdf)
