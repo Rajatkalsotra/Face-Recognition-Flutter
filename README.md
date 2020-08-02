@@ -4,11 +4,13 @@
 
 Realtime face recognition flutter app.
 
+ [Download](https://github.com/Rajatkalsotra/Face-Recognition-with-Flutter/raw/master/Face%20Recognition.apk) apk file.
+
 ## Steps
 
 ### Face detection
 
-Used Firebase ML Vision to detect faces.
+Used Firebase ML Vision to detect faces .
 
 ### Face Recognition
 
