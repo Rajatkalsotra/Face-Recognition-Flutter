@@ -11,14 +11,14 @@ import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:quiver/collection.dart';
 import 'package:flutter/services.dart';
 
-void main(){ 
+void main() {
   runApp(MaterialApp(
-      themeMode: ThemeMode.light,
-      theme: ThemeData(brightness: Brightness.light),
-      home: _MyHomePage(),
-      title: "Face Recognition",
-      debugShowCheckedModeBanner: false,
-    ));
+    themeMode: ThemeMode.light,
+    theme: ThemeData(brightness: Brightness.light),
+    home: _MyHomePage(),
+    title: "Face Recognition",
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
 class _MyHomePage extends StatefulWidget {
@@ -42,19 +42,27 @@ class _MyHomePageState extends State<_MyHomePage> {
   @override
   void initState() {
     super.initState();
-    
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     _initializeCamera();
   }
 
   Future loadModel() async {
     try {
-      // var interpreterOptions = tfl.InterpreterOptions() 
-      //   ..useNnApiForAndroid = true;
-      interpreter = await tfl.Interpreter.fromAsset('mobilefacenet.tflite');
+      final gpuDelegateV2 = tfl.GpuDelegateV2(
+          options: tfl.GpuDelegateOptionsV2(
+        false,
+        tfl.TfLiteGpuInferenceUsage.fastSingleAnswer,
+        tfl.TfLiteGpuInferencePriority.minLatency,
+        tfl.TfLiteGpuInferencePriority.auto,
+        tfl.TfLiteGpuInferencePriority.auto,
+      ));
+
+      var interpreterOptions = tfl.InterpreterOptions()
+        ..addDelegate(gpuDelegateV2);
+      interpreter = await tfl.Interpreter.fromAsset('mobilefacenet.tflite',
+          options: interpreterOptions);
     } on Exception {
       print('Failed to load model.');
     }
@@ -71,6 +79,7 @@ class _MyHomePageState extends State<_MyHomePage> {
     _camera =
         CameraController(description, ResolutionPreset.low, enableAudio: false);
     await _camera.initialize();
+    await Future.delayed(Duration(milliseconds: 500));
     tempDir = await getApplicationDocumentsDirectory();
     String _embPath = tempDir.path + '/emb.json';
     jsonFile = new File(_embPath);
@@ -100,7 +109,10 @@ class _MyHomePageState extends State<_MyHomePage> {
               imglib.Image croppedImage = imglib.copyCrop(
                   convertedImage, x.round(), y.round(), w.round(), h.round());
               croppedImage = imglib.copyResizeCropSquare(croppedImage, 112);
+              // int startTime = new DateTime.now().millisecondsSinceEpoch;
               res = _recog(croppedImage);
+              // int endTime = new DateTime.now().millisecondsSinceEpoch;
+              // print("Inference took ${endTime - startTime}ms");
               finalResult.add(res, _face);
             }
             setState(() {
