@@ -30,7 +30,11 @@ git clone https://github.com/Rajatkalsotra/Face-Recognition-Flutter.git
 flutter pub get 
 ```
 
-**Step 3:** Install flutter app
+**Step 3:** Add dynamic libraries for flutter_tflite package to work:
+
+[Follow these instructions](https://pub.dev/packages/tflite_flutter#important-initial-setup)
+
+**Step 4:** Install flutter app
 
 ```
 flutter run 
