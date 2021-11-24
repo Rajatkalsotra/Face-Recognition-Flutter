@@ -2,7 +2,9 @@
      alt="Face recognition">
 # Face Recognition Flutter
 
-Realtime face recognition flutter app.
+Realtime face recognition flutter app update with latest null safety implementation and the depreceated Firebase ML Vision has been migrated to Google ML Kit.
+
+This base repo has been forked from https://github.com/Rajatkalsotra/Face-Recognition-Flutter.
 
  [Download](https://github.com/Rajatkalsotra/Face-Recognition-with-Flutter/raw/master/FaceRecognition.apk) apk file.
 
@@ -10,7 +12,7 @@ Realtime face recognition flutter app.
 
 ### Face detection
 
-Used Firebase ML Vision to detect faces .
+Uses Google ML Kit
 
 ### Face Recognition
 
@@ -21,7 +23,7 @@ Convert Tensorflow implementation of [MobileFaceNet](https://github.com/sirius-a
 **Step 1:** Download or clone this repo:
 
 ```
-git clone https://github.com/Rajatkalsotra/Face-Recognition-Flutter.git
+git clone https://github.com/rjvysakh/Face-Recognition-Flutter
 ```
 
 **Step 2:** Go to project root and execute the following command in console to get the required dependencies: 
