@@ -6,7 +6,6 @@ Realtime face recognition flutter app update with latest null safety implementat
 
 This base repo has been forked from https://github.com/Rajatkalsotra/Face-Recognition-Flutter.
 
- [Download](https://github.com/Rajatkalsotra/Face-Recognition-with-Flutter/raw/master/FaceRecognition.apk) apk file.
 
 ## Steps
 
