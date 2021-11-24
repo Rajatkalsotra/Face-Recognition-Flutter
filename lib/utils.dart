@@ -3,10 +3,11 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:camera/camera.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+// import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image/image.dart' as imglib;
 
-typedef HandleDetection = Future<dynamic> Function(FirebaseVisionImage image);
+typedef HandleDetection = Future<dynamic> Function(InputImage image);
 enum Choice { view, delete }
 
 Future<CameraDescription> getCamera(CameraLensDirection dir) async {
@@ -17,17 +18,17 @@ Future<CameraDescription> getCamera(CameraLensDirection dir) async {
   );
 }
 
-FirebaseVisionImageMetadata buildMetaData(
+InputImageData buildMetaData(
   CameraImage image,
-  ImageRotation rotation,
+  InputImageRotation rotation,
 ) {
-  return FirebaseVisionImageMetadata(
-    rawFormat: image.format.raw,
+  return InputImageData(
+    inputImageFormat: InputImageFormat.BGRA8888,
     size: Size(image.width.toDouble(), image.height.toDouble()),
-    rotation: rotation,
+    imageRotation: rotation,
     planeData: image.planes.map(
       (Plane plane) {
-        return FirebaseVisionImagePlaneMetadata(
+        return InputImagePlaneMetadata(
           bytesPerRow: plane.bytesPerRow,
           height: plane.height,
           width: plane.width,
@@ -40,27 +41,27 @@ FirebaseVisionImageMetadata buildMetaData(
 Future<dynamic> detect(
   CameraImage image,
   HandleDetection handleDetection,
-  ImageRotation rotation,
+  InputImageRotation rotation,
 ) async {
   return handleDetection(
-    FirebaseVisionImage.fromBytes(
-      image.planes[0].bytes,
-      buildMetaData(image, rotation),
+    InputImage.fromBytes(
+      bytes: image.planes[0].bytes,
+      inputImageData: buildMetaData(image, rotation),
     ),
   );
 }
 
-ImageRotation rotationIntToImageRotation(int rotation) {
+InputImageRotation rotationIntToImageRotation(int rotation) {
   switch (rotation) {
     case 0:
-      return ImageRotation.rotation0;
+      return InputImageRotation.Rotation_0deg;
     case 90:
-      return ImageRotation.rotation90;
+      return InputImageRotation.Rotation_90deg;
     case 180:
-      return ImageRotation.rotation180;
+      return InputImageRotation.Rotation_180deg;
     default:
       assert(rotation == 270);
-      return ImageRotation.rotation270;
+      return InputImageRotation.Rotation_270deg;
   }
 }
 

@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:camera/camera.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+// import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'detector_painters.dart';
 import 'utils.dart';
@@ -27,16 +28,16 @@ class _MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<_MyHomePage> {
-  File jsonFile;
+  File? jsonFile;
   dynamic _scanResults;
-  CameraController _camera;
+  CameraController? _camera;
   var interpreter;
   bool _isDetecting = false;
   CameraLensDirection _direction = CameraLensDirection.front;
   dynamic data = {};
   double threshold = 1.0;
-  Directory tempDir;
-  List e1;
+  Directory? tempDir;
+  List? e1;
   bool _faceFound = false;
   final TextEditingController _name = new TextEditingController();
   @override
@@ -49,15 +50,18 @@ class _MyHomePageState extends State<_MyHomePage> {
   }
 
   Future loadModel() async {
+    print("load");
     try {
       final gpuDelegateV2 = tfl.GpuDelegateV2(
-          options: tfl.GpuDelegateOptionsV2(
-        false,
-        tfl.TfLiteGpuInferenceUsage.fastSingleAnswer,
-        tfl.TfLiteGpuInferencePriority.minLatency,
-        tfl.TfLiteGpuInferencePriority.auto,
-        tfl.TfLiteGpuInferencePriority.auto,
-      ));
+        options: tfl.GpuDelegateOptionsV2(),
+        // options: tfl.GpuDelegateOptionsV2(
+        //   false,
+        //   tfl.TfLiteGpuInferenceUsage.fastSingleAnswer,
+        //   tfl.TfLiteGpuInferencePriority.minLatency,
+        //   tfl.TfLiteGpuInferencePriority.auto,
+        //   tfl.TfLiteGpuInferencePriority.auto,
+        // ),
+      );
 
       var interpreterOptions = tfl.InterpreterOptions()
         ..addDelegate(gpuDelegateV2);
@@ -72,20 +76,21 @@ class _MyHomePageState extends State<_MyHomePage> {
     await loadModel();
     CameraDescription description = await getCamera(_direction);
 
-    ImageRotation rotation = rotationIntToImageRotation(
+    InputImageRotation rotation = rotationIntToImageRotation(
       description.sensorOrientation,
     );
 
     _camera =
         CameraController(description, ResolutionPreset.low, enableAudio: false);
-    await _camera.initialize();
+    await _camera!.initialize();
     await Future.delayed(Duration(milliseconds: 500));
     tempDir = await getApplicationDocumentsDirectory();
-    String _embPath = tempDir.path + '/emb.json';
+    String _embPath = tempDir!.path + '/emb.json';
     jsonFile = new File(_embPath);
-    if (jsonFile.existsSync()) data = json.decode(jsonFile.readAsStringSync());
+    if (jsonFile!.existsSync())
+      data = json.decode(jsonFile!.readAsStringSync());
 
-    _camera.startImageStream((CameraImage image) {
+    _camera!.startImageStream((CameraImage image) {
       if (_camera != null) {
         if (_isDetecting) return;
         _isDetecting = true;
@@ -123,6 +128,7 @@ class _MyHomePageState extends State<_MyHomePage> {
           },
         ).catchError(
           (_) {
+            print("error");
             _isDetecting = false;
           },
         );
@@ -131,7 +137,7 @@ class _MyHomePageState extends State<_MyHomePage> {
   }
 
   HandleDetection _getDetectionMethod() {
-    final faceDetector = FirebaseVision.instance.faceDetector(
+    final faceDetector = GoogleMlKit.vision.faceDetector(
       FaceDetectorOptions(
         mode: FaceDetectorMode.accurate,
       ),
@@ -143,14 +149,14 @@ class _MyHomePageState extends State<_MyHomePage> {
     const Text noResultsText = const Text('');
     if (_scanResults == null ||
         _camera == null ||
-        !_camera.value.isInitialized) {
+        !_camera!.value.isInitialized) {
       return noResultsText;
     }
     CustomPainter painter;
 
     final Size imageSize = Size(
-      _camera.value.previewSize.height,
-      _camera.value.previewSize.width,
+      _camera!.value.previewSize!.height,
+      _camera!.value.previewSize!.width,
     );
     painter = FaceDetectorPainter(imageSize, _scanResults);
     return CustomPaint(
@@ -159,7 +165,7 @@ class _MyHomePageState extends State<_MyHomePage> {
   }
 
   Widget _buildImage() {
-    if (_camera == null || !_camera.value.isInitialized) {
+    if (_camera == null || !_camera!.value.isInitialized) {
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -172,7 +178,7 @@ class _MyHomePageState extends State<_MyHomePage> {
           : Stack(
               fit: StackFit.expand,
               children: <Widget>[
-                CameraPreview(_camera),
+                CameraPreview(_camera!),
                 _buildResults(),
               ],
             ),
@@ -185,8 +191,8 @@ class _MyHomePageState extends State<_MyHomePage> {
     } else {
       _direction = CameraLensDirection.back;
     }
-    await _camera.stopImageStream();
-    await _camera.dispose();
+    await _camera!.stopImageStream();
+    await _camera!.dispose();
 
     setState(() {
       _camera = null;
@@ -254,7 +260,7 @@ class _MyHomePageState extends State<_MyHomePage> {
     var img = imglib.Image(width, height); // Create Image buffer
     const int hexFF = 0xFF000000;
     final int uvyButtonStride = image.planes[1].bytesPerRow;
-    final int uvPixelStride = image.planes[1].bytesPerPixel;
+    final int uvPixelStride = image.planes[1].bytesPerPixel!;
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         final int uvIndex =
@@ -283,11 +289,11 @@ class _MyHomePageState extends State<_MyHomePage> {
   String _recog(imglib.Image img) {
     List input = imageToByteListFloat32(img, 112, 128, 128);
     input = input.reshape([1, 112, 112, 3]);
-    List output = List(1 * 192).reshape([1, 192]);
+    List output = List.filled(1 * 192, null, growable: false).reshape([1, 192]);
     interpreter.run(input, output);
     output = output.reshape([192]);
     e1 = List.from(output);
-    return compare(e1).toUpperCase();
+    return compare(e1!).toUpperCase();
   }
 
   String compare(List currEmb) {
@@ -308,7 +314,7 @@ class _MyHomePageState extends State<_MyHomePage> {
 
   void _resetFile() {
     data = {};
-    jsonFile.deleteSync();
+    jsonFile!.deleteSync();
   }
 
   void _viewLabels() {
@@ -403,7 +409,7 @@ class _MyHomePageState extends State<_MyHomePage> {
 
   void _handle(String text) {
     data[text] = e1;
-    jsonFile.writeAsStringSync(json.encode(data));
+    jsonFile!.writeAsStringSync(json.encode(data));
     _initializeCamera();
   }
 }
